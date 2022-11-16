@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "user")
+@Table(name = "table_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -111,38 +111,32 @@ public class User {
     private List<Retweet> retweets;
 
     @ManyToMany
-    @JoinTable(name = "user_following",
+    @JoinTable(name = "table_user_following",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "following_id"))
     private List<User> followings;
 
     @ManyToMany
-    @JoinTable(name = "user_follower",
+    @JoinTable(name = "table_user_follower",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "follower_id"))
     private List<User> followers;
 
     @ManyToMany
-    @JoinTable(name = "user_muted",
+    @JoinTable(name = "table_user_muted",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "muted_id"))
     private List<User> mutedUsers;
 
     @ManyToMany
-    @JoinTable(name = "user_blocked",
+    @JoinTable(name = "table_user_blocked",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "blocked_id"))
     private List<User> blockedUsers;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_pinned_tweet",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "tweet_id"))
-    private Tweet pinnedTweet;
-
     @ManyToMany
-    @JoinTable(name = "user_requested",
+    @JoinTable(name = "table_user_requested",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "requested_id"))
     private List<User> requestedUsers;
@@ -151,5 +145,10 @@ public class User {
         this.joinDate= LocalDateTime.now().withNano(0);
     }
 
-
+    public User orElseThrow(Object o) {
+        return null;
+    }
 }
+
+
+

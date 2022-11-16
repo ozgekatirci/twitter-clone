@@ -202,6 +202,12 @@ public class UserManager implements UserService {
     }
 
     @Override
+    public void saveUser(UserResponseDto userResponseDto) {
+        User user = modelMapper.map(userResponseDto, User.class);
+        userRepository.save(user);
+    }
+
+    @Override
     public void unfollowUser(Long followerId, Long followingId) {
 
     }

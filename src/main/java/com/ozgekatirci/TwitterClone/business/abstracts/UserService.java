@@ -45,4 +45,6 @@ public interface UserService {
     void updatePassword(String password);
 
     void followUser(Long followerId, Long followingId);
+
+    void saveUser(UserResponseDto userResponseDto);
 }

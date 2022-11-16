@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "image")
+@Table(name = "table_image")
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,5 +20,8 @@ public class Image {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "tweet_id")
+    private Tweet tweet;
 
 }

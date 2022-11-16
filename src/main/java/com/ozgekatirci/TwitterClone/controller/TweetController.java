@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -23,49 +24,50 @@ public class TweetController {
     }
 
     @GetMapping("/getById")
-    public TweetResponseDto getTweetById(Long id) {
+    public TweetResponseDto getTweetById(@RequestParam Long id) {
         return tweetService.getTweetByTweetId(id);
     }
 
     @GetMapping("/getByUserId")
-    public List<TweetResponseDto> getTweetByUserId(Long id) {
+    public List<TweetResponseDto> getTweetByUserId(@RequestParam Long id) {
         return tweetService.getTweetsById(id);
     }
 
     @GetMapping("/getLikedUser")
-    public List<UserResponseDto> getLikedTweets(Long tweetId) {
+    public List<UserResponseDto> getLikedTweets(@RequestParam Long tweetId) {
         return tweetService.getLikedUsersByTweetId(tweetId);
     }
 
     @GetMapping("/getRetweetedUser")
-    public List<UserResponseDto> getRetweetedTweets(Long tweetId) {
+    public List<UserResponseDto> getRetweetedTweets(@RequestParam Long tweetId) {
         return tweetService.getRetweetedUsersByTweetId(tweetId);
 
     }
-
-    @PostMapping("/like")
-    public void likeTweet(Long tweetId, Long userId) {
-        tweetService.likeTweet(tweetId, userId);
+    @GetMapping("/like")
+    public Map<String, Object> likeTweet(@RequestParam Long tweetId, @RequestParam  Long userId) {
+        return tweetService.likeTweet(tweetId, userId);
     }
 
     @PostMapping("/retweet")
-    public void retweet(Long tweetId, Long userId) {
-        tweetService.createRetweet(tweetId, userId);
+    public Map<String, Object> retweet(@RequestParam Long tweetId, @RequestParam Long userId) {
+        return tweetService.createRetweet(tweetId, userId);
     }
 
     @PostMapping("/create")
-    public void createTweet(Long userId, TweetRequestDto tweetRequestDto) {
-        tweetService.createTweet(userId, tweetRequestDto);
+    public TweetResponseDto createTweet(@RequestParam Long userId, @RequestBody TweetRequestDto tweetRequestDto) {
+        return tweetService.createTweet(userId, tweetRequestDto);
     }
-
     @PostMapping("/delete")
-    public void deleteTweet(Long tweetId) {
-        tweetService.deleteTweet(tweetId);
+    public String deleteTweet(@RequestParam Long tweetId) {
+        return tweetService.deleteTweet(tweetId);
     }
 
     @PutMapping("/update")
-public void updateTweet(Long tweetId, TweetRequestDto tweetRequestDto) {
-        tweetService.updateTweet(tweetId, tweetRequestDto);
+public TweetResponseDto updateTweet(@RequestParam Long tweetId, @RequestBody TweetRequestDto tweetRequestDto) {
+        return tweetService.updateTweet(tweetId, tweetRequestDto);
     }
+
+
+
 
 }

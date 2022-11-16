@@ -109,12 +109,27 @@ public class TweetManager  implements TweetService {
     @Override
     public List<UserResponseDto> getLikedUsersByTweetId(Long tweetId) {
         Tweet tweet=findTweet(tweetId);
-        List<LikeTweet> likes=tweet.getLikeTweets();
-        List<UserResponseDto> userResponseDtos = new ArrayList<>();
+        List<LikeTweet>likeTweets=tweet.getLikeTweets();
 
-        for (LikeTweet likeTweet: likes) {
-            User user=likeTweet.getTweet().getUser();
-            UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
+        List<UserResponseDto> userResponseDtos = new ArrayList<>();
+        List<User> users=new ArrayList<>();
+
+        for (LikeTweet likeTweet : likeTweets) {
+            try {
+                if(likeTweet.getLikedUser().getId()!=null){
+                    User user = findUser(likeTweet.getLikedUser().getId());
+                    users.add(user);
+                    UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
+                    userResponseDtos.add(userResponseDto);
+                }
+                else{
+                    throw new ResourceNotFoundException("User not found with id " + likeTweet.getLikedUser().getId(),HttpStatus.NOT_FOUND);
+                }
+
+            } catch (ResourceNotFoundException e) {
+                e.printStackTrace();
+            }
+
         }
         return userResponseDtos;
 
@@ -221,7 +236,7 @@ public class TweetManager  implements TweetService {
         tweetRepository.save(quoteTweet);
 
         tweet.setQuoteCount(tweet.getQuoteCount() + 1);
-        tweet.getQuotesOfTweet().add(quoteTweet);
+//        tweet.getQuotes().add(quoteTweet);
         tweetRepository.save(tweet);
 
         user.getTweets().add(quoteTweet);
@@ -244,13 +259,9 @@ public class TweetManager  implements TweetService {
                 throw new ResourceNotFoundException("You have already liked this tweet.", HttpStatus.BAD_REQUEST);
             }
         }
-        LikeTweet newLikedTweet = new LikeTweet();
-        newLikedTweet.setTweet(tweet);
-        newLikedTweet.getLikedUsers().add(user);
-        likeTweetRepository.save(newLikedTweet);
         userRepository.save(user);
+        user.setLikedTweets(likedTweets);
         user.setLikeCount(user.getLikeCount() + 1);
-        likedTweets.add(newLikedTweet);
         return Map.of("message", "Tweet liked successfully");
     }
 

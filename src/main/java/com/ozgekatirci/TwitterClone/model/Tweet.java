@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "tweet")
+@Table(name = "table_tweet")
 public class Tweet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -71,30 +71,30 @@ public class Tweet {
     @OneToMany(mappedBy = "tweet")
     private List<Retweet> retweets;
 
-    @OneToMany
+    @OneToMany(mappedBy = "tweet")
     private List<Image> images;
 
     @ManyToMany
-    @JoinTable(name = "tweet_reply",
+    @JoinTable(name = "table_tweet_reply",
             joinColumns = @JoinColumn(name = "tweet_id"),
             inverseJoinColumns = @JoinColumn(name = "reply_id"))
     private List<Tweet> replies;
 
-    @OneToMany
-    @JoinTable(name = "quotes_of_tweet",
+    @OneToOne
+    @JoinTable(name = "table_quote_tweet",
             joinColumns = @JoinColumn(name = "tweet_id"),
             inverseJoinColumns = @JoinColumn(name = "quote_id"))
-    private List<Tweet> quotesOfTweet;
-
-    @OneToOne
-    @JoinTable(name = "quote_tweet",
-            joinColumns = @JoinColumn(name = "tweets_id"),
-            inverseJoinColumns = @JoinColumn(name = "quote_tweet_id"))
     private Tweet quoteTweet;
+
+//    @OneToMany
+//    @JoinTable(name = "table_quotes",
+//            joinColumns = @JoinColumn(name = "tweet_id"),
+//            inverseJoinColumns = @JoinColumn(name = "quote_id"))
+//    private List<Tweet> quotes;
 
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_pinned_tweet",
+    @JoinTable(name = "table_user_pinned_tweet",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "tweet_id"))
     private Tweet pinnedTweet;
@@ -103,7 +103,7 @@ public class Tweet {
        this.tweetDate= LocalDateTime.now().withNano(0);
        this.likeTweets=new ArrayList<>();
        this.replies=new ArrayList<>();
-       this.quotesOfTweet=new ArrayList<>();
+//       this.quotes=new ArrayList<>();
        this.images=new ArrayList<>();
    }
 

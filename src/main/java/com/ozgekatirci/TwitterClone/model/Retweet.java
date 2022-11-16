@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
+@Table(name = "table_retweet")
 public class Retweet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

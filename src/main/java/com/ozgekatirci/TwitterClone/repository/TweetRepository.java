@@ -27,7 +27,6 @@ public interface  TweetRepository extends JpaRepository<Tweet, Long> {
     List<Tweet> findQuotesByTweetId(Long tweetId);
 
 
-
     List<Tweet> findMediaTweetsByTweetId(Long userId);
 
 

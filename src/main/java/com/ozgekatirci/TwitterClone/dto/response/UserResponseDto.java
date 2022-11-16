@@ -7,8 +7,7 @@ public class UserResponseDto {
     private Long id;
     private String username;
     private String bio;
-    private boolean isPrivateProfile;
-    private boolean isFollower;
+    private boolean isProtectedProfile;
 
 
 }

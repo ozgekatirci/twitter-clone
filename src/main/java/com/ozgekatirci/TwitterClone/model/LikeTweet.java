@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "like_tweet")
+@Table(name = "table_like_tweet")
 public class LikeTweet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,9 +22,9 @@ public class LikeTweet {
     private LocalDateTime likeDate;
 
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private List<User> likedUsers;
+    private User likedUser;
 
     @ManyToOne
     @JoinColumn(name = "tweet_id")
