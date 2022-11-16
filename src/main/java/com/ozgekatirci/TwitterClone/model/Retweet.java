@@ -22,9 +22,9 @@ public class Retweet {
     @Column(name = "retweet_date")
     private LocalDateTime retweetDate;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private List<User> retweetedUsers;
+    private User retweetedUser;
 
     @ManyToOne
     @JoinColumn(name = "tweet_id")
@@ -36,13 +36,9 @@ public class Retweet {
     }
 
 
-
-
-
-
-
-
-
-
-
+    public Retweet(Tweet tweet, User user) {
+        this.tweet = tweet;
+        this.retweetedUser= user;
+        this.retweetDate=LocalDateTime.now().withNano(0);
+    }
 }

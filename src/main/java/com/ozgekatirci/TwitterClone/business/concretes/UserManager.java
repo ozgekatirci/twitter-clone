@@ -10,6 +10,7 @@ import com.ozgekatirci.TwitterClone.dto.response.UserProfileSettingsResponseDto;
 import com.ozgekatirci.TwitterClone.dto.response.UserResponseDto;
 import com.ozgekatirci.TwitterClone.model.Image;
 import com.ozgekatirci.TwitterClone.model.LikeTweet;
+import com.ozgekatirci.TwitterClone.model.Retweet;
 import com.ozgekatirci.TwitterClone.model.User;
 import com.ozgekatirci.TwitterClone.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -82,6 +83,17 @@ public class UserManager implements UserService {
         List<TweetResponseDto> tweetResponseDtos = new ArrayList<>();
         for (LikeTweet likedTweet : likedTweets) {
             TweetResponseDto tweetResponseDto = modelMapper.map(likedTweet.getTweet(), TweetResponseDto.class);
+            tweetResponseDtos.add(tweetResponseDto);
+        }
+        return tweetResponseDtos;
+    }
+    @Override
+    public List<TweetResponseDto> getUserRetweetedTweets(Long id) {
+        User user= userRepository.findById(id).get();
+        List<TweetResponseDto> tweetResponseDtos = new ArrayList<>();
+        List<Retweet> retweetedTweets = user.getRetweets();
+        for (Retweet retweetedTweet : retweetedTweets) {
+            TweetResponseDto tweetResponseDto = modelMapper.map(retweetedTweet.getTweet(), TweetResponseDto.class);
             tweetResponseDtos.add(tweetResponseDto);
         }
         return tweetResponseDtos;
@@ -206,6 +218,8 @@ public class UserManager implements UserService {
         User user = modelMapper.map(userResponseDto, User.class);
         userRepository.save(user);
     }
+
+
 
     @Override
     public void unfollowUser(Long followerId, Long followingId) {

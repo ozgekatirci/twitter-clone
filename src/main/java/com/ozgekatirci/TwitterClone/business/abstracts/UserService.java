@@ -47,4 +47,6 @@ public interface UserService {
     void followUser(Long followerId, Long followingId);
 
     void saveUser(UserResponseDto userResponseDto);
+
+    List<TweetResponseDto> getUserRetweetedTweets(Long id);
 }

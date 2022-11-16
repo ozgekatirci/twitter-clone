@@ -36,7 +36,8 @@ public class UserContoller {
     }
     @GetMapping("/getRetweetedTweets")
     public List<TweetResponseDto> getRetweetedTweets(@RequestParam Long id) {
-        return null;
+
+        return userService.getUserRetweetedTweets(id);
     }
 
     @GetMapping("/getTweets")

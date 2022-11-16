@@ -38,7 +38,7 @@ public class TweetController {
         return tweetService.getLikedUsersByTweetId(tweetId);
     }
 
-    @GetMapping("/getRetweetedUser")
+    @GetMapping("/getRetweetedUsers")
     public List<UserResponseDto> getRetweetedTweets(@RequestParam Long tweetId) {
         return tweetService.getRetweetedUsersByTweetId(tweetId);
 
@@ -48,7 +48,7 @@ public class TweetController {
         return tweetService.likeTweet(tweetId, userId);
     }
 
-    @PostMapping("/retweet")
+    @GetMapping("/retweet")
     public Map<String, Object> retweet(@RequestParam Long tweetId, @RequestParam Long userId) {
         return tweetService.createRetweet(tweetId, userId);
     }
@@ -66,8 +66,6 @@ public class TweetController {
 public TweetResponseDto updateTweet(@RequestParam Long tweetId, @RequestBody TweetRequestDto tweetRequestDto) {
         return tweetService.updateTweet(tweetId, tweetRequestDto);
     }
-
-
 
 
 }

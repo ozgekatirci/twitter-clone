@@ -138,15 +138,32 @@ public class TweetManager  implements TweetService {
 
     @Override
     public List<UserResponseDto> getRetweetedUsersByTweetId(Long tweetId) {
+        Tweet tweet=findTweet(tweetId);
+        List<Retweet>retweets=tweet.getRetweets();
 
-        List<Retweet> retweets=findTweet(tweetId).getRetweets();
         List<UserResponseDto> userResponseDtos = new ArrayList<>();
+        List<User> users=new ArrayList<>();
 
-        for (Retweet retweet: retweets) {
-            User user=retweet.getTweet().getUser();
-            UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
+        for (Retweet retweet : retweets) {
+            try {
+
+                if(retweet.getRetweetedUser() != null){
+                    User user = findUser(retweet.getRetweetedUser().getId());
+                    users.add(user);
+                    UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
+                    userResponseDtos.add(userResponseDto);
+                }
+                else{
+                    throw new ResourceNotFoundException("User not found with id " + retweet.getRetweetedUser().getId(),HttpStatus.NOT_FOUND);
+                }
+
+            } catch (ResourceNotFoundException e) {
+                e.printStackTrace();
+            }
+
         }
         return userResponseDtos;
+
     }
 
 
@@ -184,28 +201,7 @@ public class TweetManager  implements TweetService {
     }
 
 
-    @Override
-    public Map<String, Object> createRetweet(Long tweetId, Long userId) {
-        User user=findUser(userId);
-        Tweet tweet=findTweet(tweetId);
 
-        List<Retweet> retweets=user.getRetweets();
-        for (Retweet retweet : retweets) {
-            if (retweet.getTweet().getTweetId().equals(tweetId)) {
-                throw new ResourceNotFoundException("You have already retweeted this tweet.", HttpStatus.BAD_REQUEST);
-            }
-        }
-        Retweet newRetweet = new Retweet();
-        newRetweet.setTweet(tweet);
-        newRetweet.getRetweetedUsers().add(user);
-        retweetRepository.save(newRetweet);
-        userRepository.save(user);
-        user.setRetweetCount(user.getRetweetCount() + 1);
-        retweets.add(newRetweet);
-        tweet.setRetweetCount(tweet.getRetweetCount() + 1);
-        tweetRepository.save(tweet);
-        return Map.of("message", "Tweet retweeted successfully");
-    }
 
 
     @Override
@@ -266,6 +262,28 @@ public class TweetManager  implements TweetService {
         user.setLikeCount(user.getLikeCount() + 1);
         userRepository.save(user);
         return Map.of("message", "Tweet liked successfully");
+    }
+
+    @Override
+    public Map<String, Object> createRetweet(Long tweetId, Long userId) {
+        User user=findUser(userId);
+        Tweet tweet=findTweet(tweetId);
+
+        List<Retweet> retweets=user.getRetweets();
+        for (Retweet retweet : retweets) {
+            if (retweet.getTweet().getTweetId().equals(tweetId)) {
+                throw new ResourceNotFoundException("You have already retweeted this tweet.", HttpStatus.BAD_REQUEST);
+            }
+        }
+        Retweet newRetweet = new Retweet(tweet, user);
+        retweetRepository.save(newRetweet);
+        user.getRetweets().add(newRetweet);
+        user.setRetweetCount(user.getRetweetCount() + 1);
+        retweets.add(newRetweet);
+        tweet.setRetweetCount(tweet.getRetweetCount() + 1);
+        tweetRepository.save(tweet);
+        userRepository.save(user);
+        return Map.of("message", "Tweet retweeted successfully");
     }
 
     @Override
