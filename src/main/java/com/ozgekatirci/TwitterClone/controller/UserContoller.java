@@ -65,7 +65,6 @@ public class UserContoller {
         userService.unfollowUser(followerId, followingId);
     }
 
-
     @PostMapping("/delete")
     public void delete(@RequestParam Long id) {
         userService.deleteAccount(id);

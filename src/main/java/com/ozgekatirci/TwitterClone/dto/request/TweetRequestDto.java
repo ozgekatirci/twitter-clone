@@ -11,5 +11,4 @@ public class TweetRequestDto {
     private Long id;
     private String content;
     private List<Image> images;
-
 }
