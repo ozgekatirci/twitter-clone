@@ -104,10 +104,10 @@ public class User {
     @ManyToMany
     private List<Tweet> tweets;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<LikeTweet> likedTweets;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Retweet> retweets;
 
     @ManyToMany

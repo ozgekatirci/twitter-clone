@@ -35,4 +35,9 @@ public class LikeTweet {
     }
 
 
+    public LikeTweet(Tweet tweet, User user) {
+        this.tweet = tweet;
+        this.likedUser = user;
+        this.likeDate=LocalDateTime.now().withNano(0);
+    }
 }

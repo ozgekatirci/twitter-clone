@@ -116,7 +116,8 @@ public class TweetManager  implements TweetService {
 
         for (LikeTweet likeTweet : likeTweets) {
             try {
-                if(likeTweet.getLikedUser().getId()!=null){
+
+                if(likeTweet.getLikedUser() != null){
                     User user = findUser(likeTweet.getLikedUser().getId());
                     users.add(user);
                     UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
@@ -259,9 +260,11 @@ public class TweetManager  implements TweetService {
                 throw new ResourceNotFoundException("You have already liked this tweet.", HttpStatus.BAD_REQUEST);
             }
         }
-        userRepository.save(user);
-        user.setLikedTweets(likedTweets);
+        LikeTweet likeTweet = new LikeTweet(tweet, user);
+        likeTweetRepository.save(likeTweet);
+        user.getLikedTweets().add(likeTweet);
         user.setLikeCount(user.getLikeCount() + 1);
+        userRepository.save(user);
         return Map.of("message", "Tweet liked successfully");
     }
 
