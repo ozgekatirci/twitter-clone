@@ -5,6 +5,7 @@ import com.ozgekatirci.TwitterClone.dto.response.TweetResponseDto;
 import com.ozgekatirci.TwitterClone.dto.response.UserProfileSettingsResponseDto;
 import com.ozgekatirci.TwitterClone.dto.response.UserResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,36 +24,37 @@ public class UserContoller {
     }
 
     @GetMapping("/all")
-    public List<UserResponseDto> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
     @GetMapping("/getById")
-    public UserProfileSettingsResponseDto getUserById(@RequestParam Long id) {
-        return userService.getUserById(id);
+    public  ResponseEntity<UserProfileSettingsResponseDto>  getUserById(@RequestParam Long id) {
+
+        return ResponseEntity.ok(userService.getUserById(id));
     }
     @GetMapping("/getLikedTweets")
-    public List<TweetResponseDto> getLikedTweets(@RequestParam Long id) {
-        return userService.getUserLikedTweets(id);
+    public ResponseEntity<List<TweetResponseDto>> getLikedTweets(@RequestParam Long id) {
+        return ResponseEntity.ok(userService.getUserLikedTweets(id));
     }
     @GetMapping("/getRetweetedTweets")
-    public List<TweetResponseDto> getRetweetedTweets(@RequestParam Long id) {
+    public ResponseEntity<List<TweetResponseDto>> getRetweetedTweets(@RequestParam Long id) {
 
-        return userService.getUserRetweetedTweets(id);
+        return ResponseEntity.ok(userService.getUserRetweetedTweets(id));
     }
 
     @GetMapping("/getTweets")
-    public List<TweetResponseDto> getTweets(@RequestParam Long id) {
-        return userService.getTweetsById(id);
+    public ResponseEntity<List<TweetResponseDto>> getTweets(@RequestParam Long id) {
+            return ResponseEntity.ok(userService.getTweetsById(id));
     }
 
     @GetMapping("/getFollowers")
-    public List<UserResponseDto> getFollowers(@RequestParam Long id) {
-        return userService.getFollowers(id);
+    public ResponseEntity<List<UserResponseDto>> getFollowers(@RequestParam Long id) {
+        return ResponseEntity.ok(userService.getFollowers(id));
     }
 
     @GetMapping("/getFollowings")
-    public List<UserResponseDto> getFollowings(@RequestParam Long id) {
-        return userService.getFollowings(id);
+    public ResponseEntity<List<UserResponseDto>>getFollowings(@RequestParam Long id) {
+        return ResponseEntity.ok(userService.getFollowings(id));
     }
 
    @PostMapping("/follow")
@@ -67,6 +69,7 @@ public class UserContoller {
 
     @PostMapping("/delete")
     public void delete(@RequestParam Long id) {
+
         userService.deleteAccount(id);
     }
 

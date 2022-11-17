@@ -6,6 +6,8 @@ import com.ozgekatirci.TwitterClone.dto.request.TweetRequestDto;
 import com.ozgekatirci.TwitterClone.dto.response.TweetResponseDto;
 import com.ozgekatirci.TwitterClone.dto.response.UserResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,52 +21,53 @@ public class TweetController {
     private final TweetService tweetService;
 
     @GetMapping("/all")
-    public List<TweetResponseDto> getAllTweets() {
-        return tweetService.getAllTweets();
+    public ResponseEntity<List<TweetResponseDto>> getAllTweets() {
+        return ResponseEntity.ok(tweetService.getAllTweets());
     }
 
     @GetMapping("/getById")
-    public TweetResponseDto getTweetById(@RequestParam Long id) {
-        return tweetService.getTweetByTweetId(id);
+    public ResponseEntity<TweetResponseDto> getTweetById(@RequestParam Long id) {
+        return ResponseEntity.ok(tweetService.getTweetByTweetId(id));
     }
 
     @GetMapping("/getByUserId")
-    public List<TweetResponseDto> getTweetByUserId(@RequestParam Long id) {
-        return tweetService.getTweetsById(id);
+    public ResponseEntity<List<TweetResponseDto>> getTweetByUserId(@RequestParam Long id) {
+        return ResponseEntity.ok(tweetService.getTweetsById(id));
     }
 
     @GetMapping("/getLikedUser")
-    public List<UserResponseDto> getLikedTweets(@RequestParam Long tweetId) {
-        return tweetService.getLikedUsersByTweetId(tweetId);
+    public ResponseEntity<List<UserResponseDto>> getLikedTweets(@RequestParam Long tweetId) {
+        return ResponseEntity.ok(tweetService.getLikedUsersByTweetId(tweetId));
+
     }
 
     @GetMapping("/getRetweetedUsers")
-    public List<UserResponseDto> getRetweetedTweets(@RequestParam Long tweetId) {
-        return tweetService.getRetweetedUsersByTweetId(tweetId);
+    public ResponseEntity<List<UserResponseDto>> getRetweetedTweets(@RequestParam Long tweetId) {
+        return ResponseEntity.ok(tweetService.getRetweetedUsersByTweetId(tweetId));
 
     }
     @GetMapping("/like")
-    public Map<String, Object> likeTweet(@RequestParam Long tweetId, @RequestParam  Long userId) {
-        return tweetService.likeTweet(tweetId, userId);
+    public ResponseEntity<Map<String, Object>> likeTweet(@RequestParam Long tweetId, @RequestParam  Long userId) {
+        return ResponseEntity.ok(tweetService.likeTweet(tweetId, userId));
     }
 
     @GetMapping("/retweet")
-    public Map<String, Object> retweet(@RequestParam Long tweetId, @RequestParam Long userId) {
-        return tweetService.createRetweet(tweetId, userId);
+    public ResponseEntity<Map<String, Object>> retweet(@RequestParam Long tweetId, @RequestParam Long userId) {
+        return ResponseEntity.ok(tweetService.createRetweet(tweetId, userId));
     }
 
     @PostMapping("/create")
-    public TweetResponseDto createTweet(@RequestParam Long userId, @RequestBody TweetRequestDto tweetRequestDto) {
-        return tweetService.createTweet(userId, tweetRequestDto);
+    public ResponseEntity<TweetResponseDto> createTweet(@RequestParam Long userId, @RequestBody TweetRequestDto tweetRequestDto) {
+        return ResponseEntity.ok(tweetService.createTweet(userId, tweetRequestDto));
     }
-    @PostMapping("/delete")
-    public String deleteTweet(@RequestParam Long tweetId) {
-        return tweetService.deleteTweet(tweetId);
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteTweet(@RequestParam Long tweetId) {
+        return ResponseEntity.ok(tweetService.deleteTweet(tweetId));
     }
 
     @PutMapping("/update")
-public TweetResponseDto updateTweet(@RequestParam Long tweetId, @RequestBody TweetRequestDto tweetRequestDto) {
-        return tweetService.updateTweet(tweetId, tweetRequestDto);
+public ResponseEntity<TweetResponseDto> updateTweet(@RequestParam Long tweetId, @RequestBody TweetRequestDto tweetRequestDto) {
+        return ResponseEntity.ok(tweetService.updateTweet(tweetId, tweetRequestDto));
     }
 
 

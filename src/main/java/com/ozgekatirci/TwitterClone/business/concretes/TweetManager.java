@@ -298,7 +298,6 @@ public class TweetManager  implements TweetService {
         tweet.setDeleted(true);
         tweetRepository.save(tweet);
         return "Tweet deleted successfully";
-
     }
 
     @Override
