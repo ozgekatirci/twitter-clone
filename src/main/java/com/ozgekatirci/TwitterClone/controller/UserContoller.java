@@ -57,17 +57,17 @@ public class UserContoller {
         return ResponseEntity.ok(userService.getFollowings(id));
     }
 
-   @PostMapping("/follow")
-    public void follow(@RequestParam Long followerId, @RequestParam Long followingId) {
-        userService.followUser(followerId, followingId);
+   @GetMapping("/follow")
+    public ResponseEntity<String> follow(@RequestParam Long followerId, @RequestParam Long followingId) {
+        return ResponseEntity.ok(userService.followUser(followerId, followingId));
     }
 
-    @PostMapping("/unfollow")
-    public void unfollow(@RequestParam  Long followerId, @RequestParam Long followingId) {
-        userService.unfollowUser(followerId, followingId);
+    @GetMapping("/unfollow")
+    public ResponseEntity<String> unfollow(@RequestParam  Long followerId, @RequestParam Long followingId) {
+        return ResponseEntity.ok(userService.unfollowUser(followerId, followingId));
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public void delete(@RequestParam Long id) {
 
         userService.deleteAccount(id);

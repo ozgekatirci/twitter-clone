@@ -9,5 +9,6 @@ import java.util.List;
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
     List<ImageResponseDto> findAllImagesById(Long userId);
+
 }
 

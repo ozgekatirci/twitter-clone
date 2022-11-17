@@ -31,7 +31,7 @@ public interface UserService {
     Boolean startUseTwitter();
 
 
-    void unfollowUser(Long followerId, Long followingId);
+    String unfollowUser(Long followerId, Long followingId);
 
     void blockUser(Long id);
     void unblockUser(Long id);
@@ -42,9 +42,8 @@ public interface UserService {
 
     void deleteAccount(Long id);
 
-    void updatePassword(String password);
 
-    void followUser(Long followerId, Long followingId);
+    String followUser(Long followerId, Long followingId);
 
     void saveUser(UserResponseDto userResponseDto);
 

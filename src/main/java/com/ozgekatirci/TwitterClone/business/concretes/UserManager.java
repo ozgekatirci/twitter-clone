@@ -102,9 +102,14 @@ public class UserManager implements UserService {
     @Override
     public List<TweetResponseDto> getUserTweetsAndReplies(Long id) {
         List<TweetResponseDto> tweetResponseDtos = new ArrayList<>();
-        List<TweetResponseDto> tweets = tweetRepository.findAllTweetsAndRepliesByTweetId(id);
+        List<TweetResponseDto> tweets = tweetRepository.findAllTweetsByTweetId(id);
+        List<TweetResponseDto> replies = tweetRepository.findAllRepliesByTweetId(id);
         for (TweetResponseDto tweet : tweets) {
             TweetResponseDto tweetResponseDto = modelMapper.map(tweet, TweetResponseDto.class);
+            tweetResponseDtos.add(tweetResponseDto);
+        }
+        for (TweetResponseDto reply : replies) {
+            TweetResponseDto tweetResponseDto = modelMapper.map(reply, TweetResponseDto.class);
             tweetResponseDtos.add(tweetResponseDto);
         }
         return tweetResponseDtos;
@@ -113,9 +118,9 @@ public class UserManager implements UserService {
     @Override
     public List<TweetResponseDto> getUserRepliedTweets(Long id) {
         List<TweetResponseDto> tweetResponseDtos = new ArrayList<>();
-        List<TweetResponseDto> tweets = tweetRepository.findAllRepliedTweetsByTweetId(id);
-        for (TweetResponseDto tweet : tweets) {
-            TweetResponseDto tweetResponseDto = modelMapper.map(tweet, TweetResponseDto.class);
+        List<TweetResponseDto> replies = tweetRepository.findAllRepliesByTweetId(id);
+        for (TweetResponseDto reply : replies) {
+            TweetResponseDto tweetResponseDto = modelMapper.map(reply, TweetResponseDto.class);
             tweetResponseDtos.add(tweetResponseDto);
         }
         return tweetResponseDtos;
@@ -124,9 +129,9 @@ public class UserManager implements UserService {
     @Override
     public List<TweetResponseDto> getUserQuotedTweets(Long id) {
         List<TweetResponseDto> tweetResponseDtos = new ArrayList<>();
-        List<TweetResponseDto> tweets = tweetRepository.findAllQuotedTweetsByTweetId(id);
-        for (TweetResponseDto tweet : tweets) {
-            TweetResponseDto tweetResponseDto = modelMapper.map(tweet, TweetResponseDto.class);
+        List<TweetResponseDto> quotes = tweetRepository.findAllQuotesByTweetId(id);
+        for (TweetResponseDto quote : quotes) {
+            TweetResponseDto tweetResponseDto = modelMapper.map(quote, TweetResponseDto.class);
             tweetResponseDtos.add(tweetResponseDto);
         }
         return tweetResponseDtos;
@@ -135,9 +140,9 @@ public class UserManager implements UserService {
     @Override
     public List<TweetResponseDto> getUserMediaTweets(Long id) {
         List<TweetResponseDto> tweetResponseDtos = new ArrayList<>();
-        List<TweetResponseDto> tweets = tweetRepository.findAllMediaTweetsByTweetId(id);
-        for (TweetResponseDto tweet : tweets) {
-            TweetResponseDto tweetResponseDto = modelMapper.map(tweet, TweetResponseDto.class);
+        List<TweetResponseDto> mediaTweets = tweetRepository.findAllMediaTweetsByTweetId(id);
+        for (TweetResponseDto mediaTweet : mediaTweets) {
+            TweetResponseDto tweetResponseDto = modelMapper.map(mediaTweet, TweetResponseDto.class);
             tweetResponseDtos.add(tweetResponseDto);
         }
         return tweetResponseDtos;
@@ -181,9 +186,9 @@ public class UserManager implements UserService {
 
     @Override
     public List<UserResponseDto> getFollowers(Long id) {
+        List<User> users = userRepository.findAllFollowersById(id);
         List<UserResponseDto> userResponseDtos = new ArrayList<>();
-        List<UserResponseDto> users = userRepository.findAllFollowersById(id);
-        for (UserResponseDto user : users) {
+        for (User user : users) {
             UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
             userResponseDtos.add(userResponseDto);
         }
@@ -193,8 +198,9 @@ public class UserManager implements UserService {
     @Override
     public List<UserResponseDto> getFollowings(Long id) {
         List<UserResponseDto> userResponseDtos = new ArrayList<>();
-        List<UserResponseDto> users = userRepository.findAllFollowingsById(id);
-        for (UserResponseDto user : users) {
+        List<User> users = userRepository.findAllFollowingsById(id);
+
+        for (User user : users) {
             UserResponseDto userResponseDto = modelMapper.map(user, UserResponseDto.class);
             userResponseDtos.add(userResponseDto);
         }
@@ -208,9 +214,17 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public void followUser(Long followerId, Long followingId) {
+    public String followUser(Long followerId, Long followingId) {
 
-
+        User follower = userRepository.findById(followerId).get();
+        User following = userRepository.findById(followingId).get();
+        follower.getFollowings().add(following);
+        following.getFollowers().add(follower);
+        follower.setFollowingCount(follower.getFollowingCount() + 1);
+        following.setFollowerCount(following.getFollowerCount() + 1);
+        userRepository.save(follower);
+        userRepository.save(following);
+        return "user followed";
 
     }
 
@@ -223,8 +237,17 @@ public class UserManager implements UserService {
 
 
     @Override
-    public void unfollowUser(Long followerId, Long followingId) {
+    public String unfollowUser(Long followerId, Long followingId) {
 
+        User follower = userRepository.findById(followerId).get();
+        User following = userRepository.findById(followingId).get();
+        follower.getFollowings().remove(following);
+        following.getFollowers().remove(follower);
+        follower.setFollowingCount(follower.getFollowingCount() - 1);
+        following.setFollowerCount(following.getFollowerCount() - 1);
+        userRepository.save(follower);
+        userRepository.save(following);
+        return "user unfollowed";
     }
 
     @Override
@@ -250,10 +273,7 @@ public class UserManager implements UserService {
     @Override
     public void deleteAccount(Long id) {
 
-    }
-
-    @Override
-    public void updatePassword(String password) {
 
     }
+
 }

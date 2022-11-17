@@ -10,11 +10,6 @@ import java.util.Optional;
 public interface  TweetRepository extends JpaRepository<Tweet, Long> {
     List<TweetResponseDto> findAllTweetsByTweetId(Long id);
 
-    List<TweetResponseDto> findAllTweetsAndRepliesByTweetId(Long id);
-
-    List<TweetResponseDto> findAllRepliedTweetsByTweetId(Long id);
-
-    List<TweetResponseDto> findAllQuotedTweetsByTweetId(Long id);
 
     List<TweetResponseDto> findAllMediaTweetsByTweetId(Long id);
 
@@ -31,5 +26,9 @@ public interface  TweetRepository extends JpaRepository<Tweet, Long> {
 
 
     List<TweetResponseDto> findAllByContent(String text);
+
+    List<TweetResponseDto> findAllRepliesByTweetId(Long id);
+
+    List<TweetResponseDto> findAllQuotesByTweetId(Long id);
 }
 

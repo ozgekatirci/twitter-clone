@@ -12,9 +12,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
 
-    List<UserResponseDto> findAllFollowersById(Long id);
+    List<User> findAllFollowersById(Long id);
 
-    List<UserResponseDto> findAllFollowingsById(Long id);
+    List<User> findAllFollowingsById(Long id);
 
     Optional<Object> findUserById(Long userId);
 
